@@ -2,7 +2,9 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const createBlog = async (data) => {
-  return prisma.blog.create({ data });
+  return prisma.blog.create({
+    data,
+  });
 };
 
 const getBlog = async () => {
@@ -22,7 +24,7 @@ const updateBlog = async (id, data) => {
     where: {
       id: id,
     },
-    data,
+    data: data,
   });
 };
 

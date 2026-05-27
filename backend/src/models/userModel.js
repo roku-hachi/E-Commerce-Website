@@ -10,7 +10,7 @@ const getUser = async () => {
 };
 
 const getUserById = async (id) => {
-  return prisma.user.findFirst({
+  return prisma.user.findUnique({
     where: {
       id: id,
     },
@@ -21,6 +21,17 @@ const getUserByEmail = async (email) => {
   return prisma.user.findUnique({
     where: {
       email: email,
+    },
+    include: {
+      cart: {
+        include: {
+          cart_items: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      },
     },
   });
 };

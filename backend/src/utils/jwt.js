@@ -21,11 +21,11 @@ const generateRefreshToken = (user) => {
 };
 
 const verifyRefreshToken = (token) => {
-  return jwt.verify(token, process.env.REFRESH_SECRET);
+  return jwt.verify(token, process.env.REFRESH_SECRET_KEY);
 };
 
 const verifyAccessToken = (token) => {
-  return jwt.verify(token, process.env.SECRET_KEY);
+  return jwt.verify(token, process.env.ACCESS_SECRET_KEY);
 };
 
 module.exports = {

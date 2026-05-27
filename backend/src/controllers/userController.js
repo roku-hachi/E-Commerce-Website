@@ -21,6 +21,7 @@ const createUser = async (req, res) => {
   if (req.file) {
     data.avatar = req.file.path;
   }
+  data.level = parseInt(data.level);
   data.password = await bcrypt.hash(data.password, 10);
   const user = await userModel.createUser(data);
   res.json(user);
@@ -32,7 +33,7 @@ const getUser = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
-  const id = req.params.user_id;
+  const id = parseInt(req.params.id);
   const user = await userModel.getUserById(id);
   res.json(user);
 };
@@ -44,13 +45,40 @@ const getUserByEmail = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const data = req.body;
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
+
+  if (!isValidEmail(data.email)) {
+    return res.status(400).json({
+      fields: "email",
+      message: "This email is invalid.",
+    });
+  }
+
+  // check duplicate email
+  const existingUser = await userModel.getUserByEmail(data.email);
+
+  if (existingUser && existingUser.id !== id) {
+    return res.status(400).json({
+      fields: "email",
+      message: "This email already exists.",
+    });
+  }
+
+  if (req.file) {
+    data.avatar = req.file.path;
+  }
+  if (data.password) {
+    data.password = await bcrypt.hash(data.password, 10);
+  } else {
+    delete data.password;
+  }
+  data.level = parseInt(data.level);
   const user = await userModel.updateUser(id, data);
   res.json(user);
 };
 
 const deleteUser = async (req, res) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
   const user = await userModel.deleteUser(id);
   res.json(user);
 };

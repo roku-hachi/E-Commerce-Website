@@ -6,7 +6,7 @@ const upload = require("../common/utils/file");
 router.post("/user/add", upload.uploadAvatar, userController.createUser);
 router.get("/user/list", userController.getUser);
 router.get("/user/:id", userController.getUserById);
-router.put("/user/update", userController.updateUser);
-router.delete("/user/delete", userController.deleteUser);
+router.put("/user/update/:id", upload.uploadAvatar, userController.updateUser);
+router.delete("/user/delete/:id", userController.deleteUser);
 
 module.exports = router;
